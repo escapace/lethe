@@ -112,7 +112,8 @@ describe('keyframe-list', () => {
           keyframes: {
             0: { value: [1, 2, 3] },
             100: { value: [10, 20, 30] }
-          }
+          },
+          interpolation: undefined
         }
       },
       {
@@ -124,7 +125,8 @@ describe('keyframe-list', () => {
             0: { value: 90 },
             50: { value: 50 },
             100: { value: 10 }
-          }
+          },
+          interpolation: undefined
         }
       },
       {
@@ -135,7 +137,8 @@ describe('keyframe-list', () => {
           keyframes: {
             0: { value: 0 },
             100: { value: 100 }
-          }
+          },
+          interpolation: undefined
         }
       },
       {
@@ -196,7 +199,8 @@ describe('keyframe-list', () => {
             0: { value: 'a' },
             50: { value: 'b' },
             100: { value: 'c' }
-          }
+          },
+          interpolation: undefined
         }
       },
       {
@@ -207,7 +211,8 @@ describe('keyframe-list', () => {
           keyframes: {
             0: { value: true },
             100: { value: false }
-          }
+          },
+          interpolation: undefined
         }
       },
       {

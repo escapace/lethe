@@ -7,7 +7,9 @@ import {
   KeyframeListState,
   ActionKeyframes,
   Actions as ListActions,
-  TypeKeyframes
+  TypeKeyframes,
+  // Interpolation,
+  Easing
 } from '../keyframe-list/types'
 
 import { SYMBOL_ANIMATION } from '../types'
@@ -35,13 +37,14 @@ type UnionToIntersection<U> = (U extends any
   ? I
   : never
 
-type ExtractValue<T> = (T extends Record<string | number, infer U>
-? U extends (...args: any) => infer R
-  ? R
-  : U
-: never) extends { value: infer V }
-  ? V
-  : never
+type ExtractValue<
+  T,
+  Q = T extends Record<string | number, infer U>
+    ? U extends (...args: any) => infer R
+      ? R
+      : U
+    : never
+> = Q extends { value: infer V } ? V : never
 
 type ToPairs<T> = {
   [P in keyof T]: [P, T[P]]
@@ -50,9 +53,15 @@ type ToPairs<T> = {
   : never
 
 type AnimationProduct<T extends ActionKeyframes['payload']> = {
-  [P1 in keyof T]: {
-    [P2 in keyof T]: Record<$.Cast<T[P1], string>, ExtractValue<T[P2]>>
-  }[$.Cast<keyof T, 'keyframes'>]
+  [P1 in keyof T]: T['interpolation'] extends (...args: any) => any
+    ? {
+        [P4 in keyof T]: T[P4] extends (...args: any) => infer Z
+          ? Record<$.Cast<T[P1], string>, Z>
+          : never
+      }[$.Cast<keyof T, 'interpolation'>]
+    : {
+        [P2 in keyof T]: Record<$.Cast<T[P1], string>, ExtractValue<T[P2]>>
+      }[$.Cast<keyof T, 'keyframes'>]
 }[$.Cast<keyof T, 'name'>]
 
 export type ActionKeyframeListPayload<
@@ -161,6 +170,7 @@ export interface AnimationKeyMap {
   listIndex: number
   propertyIndex: number
   propertyType: TypeKeyframes
+  propertyInterpolation: ((...args: any[]) => any) | undefined
 }
 
 export interface AnimationData {
@@ -172,7 +182,7 @@ export interface AnimationData {
           number,
           {
             value: string | number | boolean | number[]
-            easing?: (t: number) => number
+            easing?: Easing
           }
         ]
       >

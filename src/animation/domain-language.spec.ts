@@ -7,6 +7,7 @@ import { TypeAction, ActionKeyframeList } from './types'
 import { list } from '../keyframe-list/domain-language'
 import { Simple, simple } from '../simple'
 import { easeInExpo, linear } from '../easings'
+import lerpArray from 'lerp-array'
 
 describe('animation', () => {
   it('empty', () => {
@@ -164,5 +165,59 @@ describe('animation', () => {
     assert.deepEqual(Array.from(test(0)), [['A', { number: 50 }]])
     assert.deepEqual(Array.from(test(100)), [['A', { number: 50 }]])
     assert.deepEqual(Array.from(test(75)), [['A', { number: 50 }]])
+  })
+
+  it('reduce() ; custom interpolation', () => {
+    assert.isFunction(animation)
+
+    const listA = list()
+      .name('A')
+      .number(
+        'number',
+        {
+          50: {
+            value: 50,
+            easing: linear()
+          }
+        },
+        (a: number, b: number, c: number) => `${lerpArray(a, b, c)}`
+      )
+
+    const test = animation()
+      .add(listA)
+      .reduce()
+
+    assert.deepEqual(Array.from(test(0)), [['A', { number: '50' }]])
+    assert.deepEqual(Array.from(test(100)), [['A', { number: '50' }]])
+    assert.deepEqual(Array.from(test(75)), [['A', { number: '50' }]])
+  })
+
+  it('reduce() ; custom interpolation', () => {
+    assert.isFunction(animation)
+
+    const listA = list()
+      .name('A')
+      .number(
+        'number',
+        {
+          0: {
+            value: [0],
+            easing: linear()
+          },
+          100: {
+            value: [100],
+            easing: linear()
+          }
+        },
+        (a: number[], b: number[], c: number) => `${lerpArray(a, b, c)[0]}`
+      )
+
+    const test = animation()
+      .add(listA)
+      .reduce()
+
+    assert.deepEqual(Array.from(test(0)), [['A', { number: '0' }]])
+    assert.deepEqual(Array.from(test(100)), [['A', { number: '100' }]])
+    assert.deepEqual(Array.from(test(75)), [['A', { number: '75' }]])
   })
 })

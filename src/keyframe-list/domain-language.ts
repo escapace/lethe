@@ -64,7 +64,11 @@ export const list = builder<Settings>([
     [Options.Dependencies]: [TypeAction.Name],
     [Options.Reducer]: reducer,
     [Options.Interface]: (dispatch, log) => ({
-      number(name: string, keyframes: KeyframesNumberArray | KeyframesNumber) {
+      number(
+        name: string,
+        keyframes: KeyframesNumberArray | KeyframesNumber,
+        interpolation?: (...args: any[]) => any
+      ) {
         assert.keyframeName(name, log)
 
         // TODO: Check array length on TypeKeyframes.NumberArray
@@ -99,7 +103,9 @@ export const list = builder<Settings>([
           payload: {
             type,
             name,
-            keyframes
+            keyframes,
+            // TODO: validate
+            interpolation
           }
         })
       },
@@ -127,7 +133,8 @@ export const list = builder<Settings>([
           payload: {
             type,
             name,
-            keyframes
+            keyframes,
+            interpolation: undefined
           }
         })
       },
@@ -155,7 +162,8 @@ export const list = builder<Settings>([
           payload: {
             type,
             name,
-            keyframes
+            keyframes,
+            interpolation: undefined
           }
         })
       }

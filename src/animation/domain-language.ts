@@ -20,10 +20,10 @@ import {
   KeyframeList,
   TypeAction as ListTypeAction,
   ActionKeyframes,
-  TypeKeyframes
+  TypeKeyframes,
+  Easing
 } from '../keyframe-list/types'
 import { simple } from '../simple'
-import lerp from 'lerp-array'
 
 import {
   entries,
@@ -44,6 +44,7 @@ import {
   sortBy,
   sortedIndex
 } from 'lodash'
+import lerpArray from 'lerp-array'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const reducer = (log: Array<Action<TypeAction, any>>): State => {
@@ -58,16 +59,7 @@ const animationData = (
   log: Array<Action<TypeAction, any>>,
   options: { iterations: number[] }
 ) => {
-  const keyMap = new Map<
-    string,
-    {
-      listName: string
-      propertyName: string
-      listIndex: number
-      propertyIndex: number
-      propertyType: TypeKeyframes
-    }
-  >()
+  const keyMap = new Map<string, AnimationKeyMap>()
 
   const listNames: Set<string> = new Set()
 
@@ -98,12 +90,19 @@ const animationData = (
           const propertyName = propertyAction.payload.name
           const propertyType = propertyAction.payload.type
 
+          const propertyInterpolation = isFunction(
+            propertyAction.payload.interpolation
+          )
+            ? propertyAction.payload.interpolation
+            : lerpArray
+
           const keyData = {
             listName,
             propertyName,
             listIndex,
             propertyIndex,
-            propertyType
+            propertyType,
+            propertyInterpolation
           }
 
           const key = `${listName}${propertyName}`
@@ -126,7 +125,7 @@ const animationData = (
           number,
           {
             value: boolean | string | number | number[]
-            easing?: string | Function
+            easing?: Easing
           }
         >
       >()
@@ -145,24 +144,7 @@ const animationData = (
           const kf = isFunction(frame) ? frame(iteration) : frame
 
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          indice!.set(
-            Number.parseFloat(progress),
-            kf
-            // mapValues(kf, (value, key) => {
-            //   if (key === 'easing' && isString(value)) {
-            //     return parseEasings(value)
-            //   }
-
-            //   // if (key === 'easing' && isUndefined(value)) {
-            //   //   return (t: number) => t
-            //   // }
-
-            //   return value
-            // }) as {
-            //   value: boolean | string | number | number[]
-            //   easing?: string | Function
-            // }
-          )
+          indice!.set(Number.parseFloat(progress), kf)
         })
       })
 
@@ -258,8 +240,19 @@ export const animation = builder<Settings>([
           const object = merge(
             {},
             ...map(data[iteration], ([keyMap, encounters]) => {
+              const interpolation = keyMap.propertyInterpolation as (
+                ...args: any[]
+              ) => any
+
               if (encounters.length === 1 || progress === 0) {
-                return keyframeProduct(keyMap, encounters[0][1].value)
+                return keyframeProduct(
+                  keyMap,
+                  interpolation(
+                    encounters[0][1].value,
+                    encounters[0][1].value,
+                    0
+                  )
+                )
               }
 
               const index = sortedIndex(
@@ -268,7 +261,14 @@ export const animation = builder<Settings>([
               )
 
               if (isUndefined(encounters[index])) {
-                return keyframeProduct(keyMap, encounters[index - 1][1].value)
+                return keyframeProduct(
+                  keyMap,
+                  interpolation(
+                    encounters[index - 1][1].value,
+                    encounters[index - 1][1].value,
+                    0
+                  )
+                )
               }
 
               const [nextIndex, nextContent] = encounters[index]
@@ -285,7 +285,7 @@ export const animation = builder<Settings>([
 
                 return keyframeProduct(
                   keyMap,
-                  lerp(
+                  interpolation(
                     previousContent.value as number,
                     nextContent.value as number,
                     isFunction(previousContent.easing)

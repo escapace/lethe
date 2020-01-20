@@ -29,13 +29,26 @@ export enum TypeKeyframes {
 export interface ActionKeyframes<
   T extends TypeKeyframes = TypeKeyframes,
   U extends string = string,
-  V extends KeyframesMap<T> = KeyframesMap<T>
+  V extends KeyframesMap<T> = KeyframesMap<T>,
+  I extends ((...args: any[]) => any) | undefined =
+    | undefined
+    | ((...args: any[]) => any)
 > {
   type: TypeAction.Keyframes
   payload: {
     type: T
     name: U
     keyframes: V
+    interpolation: I extends (...args: any[]) => any ? I : undefined
+    // $.If<
+    //   $.Is.<I>,
+    //   undefined,
+    //   T extends TypeKeyframes.Number
+    //     ? (value1: number, value2: number, t: number) => I
+    //     : T extends TypeKeyframes.NumberArray
+    //     ? (value1: number[], value2: number[], t: number) => I
+    //     : undefined
+    // >
   }
 }
 
@@ -55,10 +68,20 @@ type KeyframesMap<T extends TypeKeyframes> = {
 
 type KeyframeValue<T> = T | ((iteration: number) => T)
 
+export type Easing = (t: number) => number
+
 interface KeyframesGeneric<T extends TypeKeyframes, U> {
   [key: number]: KeyframeValue<
     T extends TypeKeyframes.Number
-      ? { value: U; easing?: (t: number) => number }
+      ? {
+          value: U
+          easing?: Easing
+        }
+      : T extends TypeKeyframes.NumberArray
+      ? {
+          value: U
+          easing?: Easing
+        }
       : { value: U }
   >
 }
@@ -77,24 +100,38 @@ export type KeyframesString = KeyframesGeneric<TypeKeyframes.String, string>
 export interface Interface<T extends Model<State, Actions>>
   extends FluentInterface<T> {
   name<U extends string>(name: U): Next<Settings, T, ActionName<U>>
-  number<U extends string, V extends KeyframesNumberArray>(
+  number<
+    U extends string,
+    V extends KeyframesNumberArray,
+    I extends
+      | undefined
+      | ((value1: number[], value2: number[], t: number) => any) = undefined
+  >(
     name: U,
-    keyframes: V
-  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.NumberArray, U, V>>
-  number<U extends string, V extends KeyframesNumber>(
+    keyframes: V,
+    interpolation?: I
+  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.NumberArray, U, V, I>>
+  number<
+    U extends string,
+    V extends KeyframesNumber,
+    I extends
+      | undefined
+      | ((value1: number, value2: number, t: number) => any) = undefined
+  >(
     name: U,
-    keyframes: V
-  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.Number, U, V>>
+    keyframes: V,
+    interpolation?: I
+  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.Number, U, V, I>>
 
   boolean<U extends string, V extends KeyframesBoolean>(
     name: U,
     keyframes: V
-  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.Boolean, U, V>>
+  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.Boolean, U, V, undefined>>
 
   string<U extends string, V extends KeyframesString>(
     name: U,
     keyframes: V
-  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.String, U, V>>
+  ): Next<Settings, T, ActionKeyframes<TypeKeyframes.String, U, V, undefined>>
 }
 
 export interface Settings {
