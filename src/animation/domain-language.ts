@@ -94,7 +94,12 @@ const animationData = (
             propertyAction.payload.interpolation
           )
             ? propertyAction.payload.interpolation
-            : lerpArray
+            : includes(
+                [TypeKeyframes.Number, TypeKeyframes.NumberArray],
+                propertyType
+              )
+            ? lerpArray
+            : (x: any) => x
 
           const keyData = {
             listName,
