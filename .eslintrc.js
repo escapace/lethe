@@ -6,5 +6,8 @@ module.exports = {
   },
   extends: [
     'escapace'
-  ]
+  ],
+  rules: {
+    '@typescript-eslint/no-explicit-any': 0
+  }
 }
