@@ -35,7 +35,7 @@ const assertions = {
   list(value: unknown): asserts value is KeyframeList {
     const state = simple(value as KeyframeList)[SYMBOL_STATE]
 
-    ok(state.type === SYMBOL_KEYFRAME_LIST && state.isEmpty === false, 'TODO:')
+    ok(state.type === SYMBOL_KEYFRAME_LIST && !state.isEmpty, 'TODO:')
   },
   iterations(value: unknown): asserts value is number | number[] {
     if (isArray(value)) {

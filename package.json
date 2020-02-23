@@ -6,11 +6,11 @@
   "browser": "lib/umd/index.js",
   "bugs": "https://github.com/escapace/lethe/issues",
   "dependencies": {
-    "@escapace/fluent": "^2.1.0",
-    "@escapace/typelevel": "^0.5.0",
+    "@escapace/fluent": "^2.2.0",
+    "@escapace/typelevel": "^0.6.0",
     "lerp-array": "^1.1.1",
     "lodash": "^4.17.15",
-    "tslib": "^1.10.0"
+    "tslib": "^1.11.0"
   },
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
@@ -26,7 +26,7 @@
     "eslint": "6.8.0",
     "eslint-config-escapace": "3.0.1",
     "eslint-config-prettier": "6.10.0",
-    "eslint-config-standard-with-typescript": "12.0.1",
+    "eslint-config-standard-with-typescript": "14.0.0",
     "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jsdoc": "21.0.0",
     "eslint-plugin-no-null": "1.0.2",
@@ -81,9 +81,9 @@
   },
   "repository": "escapace/lethe",
   "scripts": {
-    "build": "recce build -e src/index.ts",
+    "build": "npx recce build -e src/index.ts",
     "lint": "eslint 'src/**/*.ts'",
-    "test": "recce test --browser 'src/**/**.spec.ts' --node 'src/**/**.spec.ts' --reporter lcov --reporter text",
+    "test": "npx recce test --browser 'src/**/**.spec.ts' --node 'src/**/**.spec.ts' --reporter lcov --reporter text",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
