@@ -28,14 +28,15 @@ import {
 } from './types'
 
 export const reducer = (log: Actions[]): State => {
-  const name = (find(log, action => action.type === TypeAction.Name) as
+  const name = (find(log, (action) => action.type === TypeAction.Name) as
     | ActionName
     | undefined)?.payload
 
   return {
     type: SYMBOL_KEYFRAME_LIST,
     isEmpty:
-      log.length === 0 || every(log, action => action.type === TypeAction.Name),
+      log.length === 0 ||
+      every(log, (action) => action.type === TypeAction.Name),
     name
   }
 }
@@ -46,7 +47,7 @@ export const list = builder<Settings>([
     [Options.Once]: true,
     [Options.Keys]: ['name'],
     [Options.Reducer]: reducer,
-    [Options.Interface]: dispatch => ({
+    [Options.Interface]: (dispatch) => ({
       name(name: string) {
         assert.string(name)
 
@@ -74,7 +75,7 @@ export const list = builder<Settings>([
         // TODO: Check array length on TypeKeyframes.NumberArray
         // TODO: easing validation
 
-        const types = map(keyframes, keyframe => {
+        const types = map(keyframes, (keyframe) => {
           const value = isFunction(keyframe)
             ? keyframe(0).value
             : keyframe.value
@@ -86,9 +87,9 @@ export const list = builder<Settings>([
             : null
         })
 
-        const type = every(types, t => t === TypeKeyframes.Number)
+        const type = every(types, (t) => t === TypeKeyframes.Number)
           ? TypeKeyframes.Number
-          : every(types, t => t === TypeKeyframes.NumberArray)
+          : every(types, (t) => t === TypeKeyframes.NumberArray)
           ? TypeKeyframes.NumberArray
           : null
 
@@ -112,7 +113,7 @@ export const list = builder<Settings>([
       string(name: string, keyframes: KeyframesString) {
         assert.keyframeName(name, log)
 
-        const types = map(keyframes, keyframe => {
+        const types = map(keyframes, (keyframe) => {
           const value = isFunction(keyframe)
             ? keyframe(0).value
             : keyframe.value
@@ -120,7 +121,7 @@ export const list = builder<Settings>([
           return isString(value) ? TypeKeyframes.String : null
         })
 
-        const type = every(types, t => t === TypeKeyframes.String)
+        const type = every(types, (t) => t === TypeKeyframes.String)
           ? TypeKeyframes.String
           : null
 
@@ -141,7 +142,7 @@ export const list = builder<Settings>([
       boolean(name: string, keyframes: KeyframesBoolean) {
         assert.keyframeName(name, log)
 
-        const types = map(keyframes, keyframe => {
+        const types = map(keyframes, (keyframe) => {
           const value = isFunction(keyframe)
             ? keyframe(0).value
             : keyframe.value
@@ -149,7 +150,7 @@ export const list = builder<Settings>([
           return isBoolean(value) ? TypeKeyframes.Boolean : null
         })
 
-        const type = every(types, t => t === TypeKeyframes.Boolean)
+        const type = every(types, (t) => t === TypeKeyframes.Boolean)
           ? TypeKeyframes.Boolean
           : null
 

@@ -43,13 +43,13 @@ const penner = (() => {
   // Based on jQuery UI's implemenation of easing equations from Robert Penner
   // (http://www.robertpenner.com/easing)
 
-  const eases: Record<string, Easing> = { linear: () => t => t }
+  const eases: Record<string, Easing> = { linear: () => (t) => t }
 
   const functionEasings: Record<string, Easing> = {
-    Sine: () => t => 1 - Math.cos((t * Math.PI) / 2),
-    Circ: () => t => 1 - Math.sqrt(1 - t * t),
-    Back: () => t => t * t * (3 * t - 2),
-    Bounce: () => t => {
+    Sine: () => (t) => 1 - Math.cos((t * Math.PI) / 2),
+    Circ: () => (t) => 1 - Math.sqrt(1 - t * t),
+    Back: () => (t) => t * t * (3 * t - 2),
+    Bounce: () => (t) => {
       let pow2
       let b = 4
       // eslint-disable-next-line no-empty
@@ -61,7 +61,7 @@ const penner = (() => {
     Elastic: (amplitude = 1, period = 0.5) => {
       const a = minMax(amplitude, 1, 10)
       const p = minMax(period, 0.1, 2)
-      return t => {
+      return (t) => {
         return t === 0 || t === 1
           ? t
           : -a *
@@ -78,14 +78,14 @@ const penner = (() => {
   const baseEasings = ['Quad', 'Cubic', 'Quart', 'Quint', 'Expo']
 
   baseEasings.forEach((name, i) => {
-    functionEasings[name] = () => t => Math.pow(t, i + 2)
+    functionEasings[name] = () => (t) => Math.pow(t, i + 2)
   })
 
-  Object.keys(functionEasings).forEach(name => {
+  Object.keys(functionEasings).forEach((name) => {
     const easeIn = functionEasings[name]
     eases['easeIn' + name] = easeIn
-    eases['easeOut' + name] = (a, b) => t => 1 - easeIn(a, b)(1 - t)
-    eases['easeInOut' + name] = (a, b) => t =>
+    eases['easeOut' + name] = (a, b) => (t) => 1 - easeIn(a, b)(1 - t)
+    eases['easeInOut' + name] = (a, b) => (t) =>
       t < 0.5 ? easeIn(a, b)(t * 2) / 2 : 1 - easeIn(a, b)(t * -2 + 2) / 2
   })
 

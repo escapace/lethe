@@ -47,9 +47,7 @@ describe('animation', () => {
         100: { value: false }
       })
 
-    const test = animation()
-      .add(listA)
-      .add(listB)
+    const test = animation().add(listA).add(listB)
 
     const _log: Array<
       | ActionKeyframeList<Simple<typeof listA>>
@@ -94,22 +92,19 @@ describe('animation', () => {
     const listB = list()
       .name('B')
       .number('number', {
-        0: iteration => ({
-          value: [0, 15, 30].map(n => n * (iteration + 1)),
+        0: (iteration) => ({
+          value: [0, 15, 30].map((n) => n * (iteration + 1)),
           easing: easeInExpo()
         }),
-        50: iteration => ({
-          value: [15, 30, 45].map(n => n * (iteration + 1)),
+        50: (iteration) => ({
+          value: [15, 30, 45].map((n) => n * (iteration + 1)),
           easing: linear()
         })
       })
 
-    const test = animation()
-      .add(listA)
-      .add(listB)
-      .reduce({
-        iterations: 2
-      })
+    const test = animation().add(listA).add(listB).reduce({
+      iterations: 2
+    })
 
     assert.isFunction(test)
 
@@ -146,7 +141,7 @@ describe('animation', () => {
       ]
     ])
 
-    assert.deepEqual(test(75, 1).B, { number: [15, 30, 45].map(n => n * 2) })
+    assert.deepEqual(test(75, 1).B, { number: [15, 30, 45].map((n) => n * 2) })
   })
 
   it('reduce() ; single keyframe', () => {
@@ -158,9 +153,7 @@ describe('animation', () => {
         50: { value: 50, easing: linear() }
       })
 
-    const test = animation()
-      .add(listA)
-      .reduce()
+    const test = animation().add(listA).reduce()
 
     assert.deepEqual(Array.from(test(0)), [['A', { number: 50 }]])
     assert.deepEqual(Array.from(test(100)), [['A', { number: 50 }]])
@@ -183,9 +176,7 @@ describe('animation', () => {
         (a: number, b: number, c: number) => `${lerpArray(a, b, c)}`
       )
 
-    const test = animation()
-      .add(listA)
-      .reduce()
+    const test = animation().add(listA).reduce()
 
     assert.deepEqual(Array.from(test(0)), [['A', { number: '50' }]])
     assert.deepEqual(Array.from(test(100)), [['A', { number: '50' }]])
@@ -212,9 +203,7 @@ describe('animation', () => {
         (a: number[], b: number[], c: number) => `${lerpArray(a, b, c)[0]}`
       )
 
-    const test = animation()
-      .add(listA)
-      .reduce()
+    const test = animation().add(listA).reduce()
 
     assert.deepEqual(Array.from(test(0)), [['A', { number: '0' }]])
     assert.deepEqual(Array.from(test(100)), [['A', { number: '100' }]])

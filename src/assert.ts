@@ -40,7 +40,7 @@ const assertions = {
   iterations(value: unknown): asserts value is number | number[] {
     if (isArray(value)) {
       ok(
-        every(value, num => isInteger(num)),
+        every(value, (num) => isInteger(num)),
         'TODO:'
       )
     } else {
@@ -56,7 +56,7 @@ const assertions = {
       isString(value) &&
         !some(
           log,
-          action =>
+          (action) =>
             action.type === TypeAction.Keyframes &&
             (action as ActionKeyframes).payload.name === value
         ),
@@ -73,5 +73,5 @@ export const assert: typeof assertions =
     ? assertions
     : Object.assign(
         {},
-        ...Object.keys(assertions).map(name => ({ [name]: noop }))
+        ...Object.keys(assertions).map((name) => ({ [name]: noop }))
       )

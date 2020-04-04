@@ -123,7 +123,7 @@ const animationData = (
   )
 
   const data = fromPairs(
-    map(options.iterations, iteration => {
+    map(options.iterations, (iteration) => {
       const properties = new Map<
         string,
         Map<
@@ -171,7 +171,7 @@ const animationData = (
 
         mappedProperties.set(
           keyMap.get(key) as AnimationKeyMap,
-          sortBy(arr, [value => value[0]])
+          sortBy(arr, [(value) => value[0]])
         )
       })
 
@@ -197,7 +197,7 @@ export const animation = builder<Settings>([
     [Options.Once]: false,
     [Options.Keys]: ['add'],
     [Options.Reducer]: reducer,
-    [Options.Interface]: dispatch => ({
+    [Options.Interface]: (dispatch) => ({
       add(value: KeyframeList) {
         assert.list(value)
 
@@ -261,7 +261,7 @@ export const animation = builder<Settings>([
               }
 
               const index = sortedIndex(
-                map(encounters, enc => enc[0]),
+                map(encounters, (enc) => enc[0]),
                 progress
               )
 

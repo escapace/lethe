@@ -31,9 +31,9 @@ export interface ActionKeyframeList<T extends KeyframeList = KeyframeList> {
 
 export type Actions = ActionKeyframeList
 
-type UnionToIntersection<U> = (U extends any
-? (k: U) => void
-: never) extends (k: infer I) => void
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I
+) => void
   ? I
   : never
 

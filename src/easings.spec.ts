@@ -76,7 +76,7 @@ describe('./src/easings.spec.ts', () => {
       easeInOutExpo
     ]
 
-    easings.forEach(easing => {
+    easings.forEach((easing) => {
       // const fn =
       //   easing === 'cubicBezier' ? `cubicBezier(1, 1, 1, 1)` : `${easing}()`
       assert.isFunction(easing)
@@ -92,7 +92,7 @@ describe('./src/easings.spec.ts', () => {
     const A = steps(10)
     const B = cubicBezier(1, 1, 1, 1)
     const C = spring(10, 10, 10)
-    ;[A, B, C].forEach(easing => {
+    ;[A, B, C].forEach((easing) => {
       assert.isFunction(easing)
       assert.ok(easing(1) - 1 < Number.EPSILON)
     })
