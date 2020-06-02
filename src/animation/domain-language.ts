@@ -43,7 +43,7 @@ import {
   reverse,
   sortBy,
   sortedIndex
-} from 'lodash'
+} from 'lodash-es'
 import lerpArray from 'lerp-array'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

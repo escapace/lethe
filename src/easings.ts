@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash'
+import { isUndefined } from 'lodash-es'
 
 type Easing = (...parameters: number[]) => (t: number) => number
 

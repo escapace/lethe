@@ -8,7 +8,7 @@ import {
   SYMBOL_STATE
 } from '@escapace/fluent'
 
-import { isObject, isArray } from 'lodash'
+import { isObject, isArray } from 'lodash-es'
 
 // TODO: move this into @escapace/fluent
 

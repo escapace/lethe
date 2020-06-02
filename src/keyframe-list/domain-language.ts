@@ -8,7 +8,7 @@ import {
   find,
   isBoolean,
   isNull
-} from 'lodash'
+} from 'lodash-es'
 import { assert } from '../assert'
 import { Options, builder } from '@escapace/fluent'
 import { SYMBOL_KEYFRAME_LIST } from '../types'

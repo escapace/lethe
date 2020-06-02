@@ -6,7 +6,7 @@ import {
   every,
   some,
   isNumber
-} from 'lodash'
+} from 'lodash-es'
 import {
   KeyframeList,
   ActionKeyframes,
