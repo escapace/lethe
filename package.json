@@ -6,7 +6,7 @@
   "browser": "lib/umd/index.js",
   "bugs": "https://github.com/escapace/lethe/issues",
   "dependencies": {
-    "@escapace/fluent": "^2.2.13",
+    "@escapace/fluent": "^2.2.14",
     "@escapace/typelevel": "^0.6.2",
     "lerp-array": "^1.1.1",
     "lodash-es": "^4.17.15",
