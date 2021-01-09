@@ -10,7 +10,7 @@
     "@escapace/typelevel": "^0.6.2",
     "lerp-array": "^1.1.1",
     "lodash-es": "^4.17.20",
-    "tslib": "^2.0.3"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
